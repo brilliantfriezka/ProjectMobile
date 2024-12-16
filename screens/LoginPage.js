@@ -18,11 +18,9 @@ export default function LoginPage({ navigation }) {
   const handleLogin = () => {
     let valid = true;
 
-    // Reset error messages
     setEmailError("");
     setPasswordError("");
 
-    // Validate email
     if (!email) {
       setEmailError("Email is required.");
       valid = false;
@@ -31,17 +29,11 @@ export default function LoginPage({ navigation }) {
       valid = false;
     }
 
-    // Validate password
     if (!password) {
       setPasswordError("Password is required.");
       valid = false;
     } 
-    // else if (password.length < 8) {
-    //   setPasswordError("Password must be at least 8 characters.");
-    //   valid = false;
-    // }
 
-    // If form is valid, proceed with login
     if (valid) {
       alert("Logged in successfully!");
     }
@@ -52,9 +44,9 @@ export default function LoginPage({ navigation }) {
       {/* Logo Section */}
       <View style={styles.logoContainer}>
         <Image
-          source={require("../assets/Walled.png")} // Place wallet icon in assets folder
+          source={require("../assets/Walled.png")} 
           style={styles.logo}
-          resizeMode="contain" // Ensures the full image fits inside the container
+          resizeMode="contain" 
         />
       </View>
 
@@ -111,8 +103,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: 200, // Adjust as needed for the desired size
-    height: 100, // Keep it square or as per the original aspect ratio
+    width: 200,
+    height: 100, 
   },
   inputContainer: {
     marginBottom: 24,
@@ -125,11 +117,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
     borderWidth: 1,
-    borderColor: "#D3D3D3", // Default border color
+    borderColor: "#D3D3D3",
     borderRadius: 8,
   },
   inputError: {
-    borderColor: "red", // Red border on error
+    borderColor: "red", 
   },
   errorText: {
     fontSize: 12,

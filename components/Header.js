@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
-    backgroundColor: "#F9F9F9", // You can replace this with a theme prop if needed
+    backgroundColor: "#F9F9F9",
     elevation: 4,
   },
   profileImage: {
