@@ -38,17 +38,17 @@ export default function TopupPage({ navigation }) {
         </Text>
       </View>
 
-      <View style={{ gap: 30 }}>
+      <View style={{ gap: 16 }}>
         {/* Amount Input */}
         <View style={styles.container}>
-          <Text style={{ fontSize: 16, color: "#B3B3B3" }}>Amount</Text>
+          <Text style={{ fontSize: 20 }}>Amount</Text>
           <View style={styles.inputArea}>
             <Text style={{ fontSize: 16, paddingRight: 10 }}>Rp</Text>
             <TextInput
               placeholder="Enter amount"
               keyboardType="numeric"
               onChangeText={setAmount}
-              style={{ borderBottomWidth: 2, flex: 1, fontSize: 36 }}
+              style={{ borderBottomWidth: 2, flex: 1, fontSize: 16 }}
             />
           </View>
         </View>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 20,
     gap: 10,
   },
   inputArea: {
