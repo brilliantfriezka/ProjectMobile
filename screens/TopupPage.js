@@ -23,60 +23,56 @@ export default function TopupPage({ navigation }) {
   ];
 
   return (
-    <SafeAreaView
-      style={{
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignContent: "center",
-        flex: 1,
-      }}
-    >
-      {/* Title Section */}
-      <View style={{ backgroundColor: "#19918F", padding: 20 }}>
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-          Top Up
-        </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+      {/* Header Section */}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Top Up</Text>
       </View>
 
-      <View style={{ gap: 16 }}>
+      {/* Form Section */}
+      <View style={styles.formContainer}>
         {/* Amount Input */}
         <View style={styles.container}>
-          <Text style={{ fontSize: 20 }}>Amount</Text>
+          <Text style={{ fontSize: 20, fontWeight: "400", marginBottom: 7 }}>Amount</Text>
           <View style={styles.inputArea}>
-            <Text style={{ fontSize: 16, paddingRight: 10 }}>Rp</Text>
+            <Text style={{ fontSize: 16, paddingRight: 10}}>IDR</Text>
             <TextInput
               placeholder="Enter amount"
               keyboardType="numeric"
               onChangeText={setAmount}
-              style={{ borderBottomWidth: 2, flex: 1, fontSize: 16 }}
+              style={{ borderBottomWidth: 0.2, flex: 1, fontSize: 16, color: "gray" }}
             />
           </View>
         </View>
 
         {/* Dropdown */}
-        <Dropdown
-          style={styles.dropDown}
-          placeholder="Select Payment"
-          data={dropDownData}
-          labelField="label"
-          valueField="value"
-          value={value}
-          onChange={(item) => setValue(item.value)}
-          renderItem={(item) => (
-            <View style={styles.item}>
-              <Text style={styles.textItem}>{item.label}</Text>
-            </View>
-          )}
-        />
+        <View style={styles.container}>
+          <Text style={{ fontSize: 20, fontWeight: "400" }}>Select Payment</Text>
+          <Dropdown
+            style={styles.dropDown}
+            placeholderStyle={{ color: "gray", fontSize: 16 }}
+            placeholder="Select Payment"
+            data={dropDownData}
+            labelField="label"
+            valueField="value"
+            value={value}
+            onChange={(item) => setValue(item.value)}
+            renderItem={(item) => (
+              <View style={styles.item}>
+                <Text style={styles.textItem}>{item.label}</Text>
+              </View>
+            )}
+          />
+        </View>
 
         {/* Notes Input */}
         <View style={styles.container}>
-          <Text style={{ fontSize: 16, color: "#B3B3B3" }}>Notes</Text>
+          <Text style={{ fontSize: 20, fontWeight: "400", marginBottom: 7 }}>Notes</Text>
           <View style={styles.inputArea}>
             <TextInput
               placeholder="Add a note"
               onChangeText={setNotes}
-              style={{ borderBottomWidth: 2, flex: 1, fontSize: 16 }}
+              style={{ borderBottomWidth: 0.2, flex: 1, fontSize: 16, color: "gray" }}
             />
           </View>
         </View>
@@ -84,43 +80,59 @@ export default function TopupPage({ navigation }) {
 
       {/* Submit Button */}
       <TouchableOpacity style={styles.buttonTopUp}>
-        <Text
-          style={{
-            textAlign: "center",
-            color: "white",
-            fontSize: 16,
-            fontWeight: "bold",
-          }}
-        >
-          Top Up
-        </Text>
+        <Text style={styles.buttonText}>Top Up</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "white",
+    padding: 20,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    // alignItems: "center",
+  },
+  headerText: {
+    color: "black",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  formContainer: {
+    flex: 1,
+    marginTop: 10,
+  },
   container: {
     backgroundColor: "white",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    gap: 10,
+    paddingVertical: 15,
+    marginBottom: 10,
   },
   inputArea: {
     flexDirection: "row",
     alignItems: "center",
   },
   dropDown: {
-    padding: 20,
-    backgroundColor: "white",
+    borderBottomWidth: 0.2,
+    paddingVertical: 10,
   },
   item: {
-    padding: 20,
+    padding: 10,
   },
   buttonTopUp: {
     backgroundColor: "#19918F",
     margin: 15,
-    padding: 20,
+    padding: 15,
     borderRadius: 8,
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });

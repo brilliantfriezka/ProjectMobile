@@ -9,9 +9,13 @@ import {
   Image,
   Modal,
   ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
 } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { register } from "../API/restApi"; 
 
 export default function RegisterPage() {
   const [fullname, setFullname] = useState("");
@@ -31,7 +35,7 @@ export default function RegisterPage() {
 
   const navigation = useNavigation();
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     let valid = true;
 
     // Reset errors
@@ -65,142 +69,157 @@ export default function RegisterPage() {
     }
 
     if (valid) {
-      alert("Registration Successful!");
+      try {
+        const response = await register(fullname, email, password, avatarUrl);
+
+        Alert.alert("Success", "Registration successful!", [
+          { text: "OK", onPress: () => navigation.navigate("Login") },
+        ]);
+      } catch (error) {
+        
+        Alert.alert("Error", error.response.data.message);
+      }
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Logo */}
-      <View style={styles.logoContainer}>
-        <Image
-          source={require("../assets/Walled.png")}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
-
-      {/* Input Fields */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, fullnameError && styles.inputError]}
-          placeholder="Fullname"
-          placeholderTextColor="black"
-          value={fullname}
-          onChangeText={setFullname}
-        />
-        {fullnameError ? <Text style={styles.errorText}>{fullnameError}</Text> : null}
-
-        <TextInput
-          style={[styles.input, emailError && styles.inputError]}
-          placeholder="Email"
-          keyboardType="email-address"
-          placeholderTextColor="black"
-          value={email}
-          onChangeText={setEmail}
-        />
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-
-        <TextInput
-          style={[styles.input, passwordError && styles.inputError]}
-          placeholder="Password"
-          placeholderTextColor="black"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Avatar URL"
-          placeholderTextColor="black"
-          value={avatarUrl}
-          onChangeText={setAvatarUrl}
-        />
-      </View>
-
-      {/* Terms and Conditions */}
-      <View style={{ marginBottom: 20 }}>
-        <View style={styles.termsContainer}>
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={isChecked ? "checked" : "unchecked"}
-              onPress={() => setIsChecked(!isChecked)}
-              color="#088A85"
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          {/* Logo */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../assets/Walled.png")}
+              style={styles.logo}
+              resizeMode="contain"
             />
           </View>
-          <Text style={styles.termsText}>
-            I have read and agree to the{" "}
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Text style={styles.termsLink}>Terms and Conditions</Text>
+
+          {/* Input Fields */}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[styles.input, fullnameError && styles.inputError]}
+              placeholder="Fullname"
+              placeholderTextColor="black"
+              value={fullname}
+              onChangeText={setFullname}
+            />
+            {fullnameError ? (
+              <Text style={styles.errorText}>{fullnameError}</Text>
+            ) : null}
+
+            <TextInput
+              style={[styles.input, emailError && styles.inputError]}
+              placeholder="Email"
+              keyboardType="email-address"
+              placeholderTextColor="black"
+              value={email}
+              onChangeText={setEmail}
+            />
+            {emailError ? (
+              <Text style={styles.errorText}>{emailError}</Text>
+            ) : null}
+
+            <TextInput
+              style={[styles.input, passwordError && styles.inputError]}
+              placeholder="Password"
+              placeholderTextColor="black"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+            {passwordError ? (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            ) : null}
+
+            <TextInput
+              style={styles.input}
+              placeholder="Avatar URL"
+              placeholderTextColor="black"
+              value={avatarUrl}
+              onChangeText={setAvatarUrl}
+            />
+          </View>
+
+          {/* Terms and Conditions */}
+          <View style={{ marginBottom: 20 }}>
+            <View style={styles.termsContainer}>
+              <View style={styles.checkboxContainer}>
+                <Checkbox
+                  status={isChecked ? "checked" : "unchecked"}
+                  onPress={() => setIsChecked(!isChecked)}
+                  color="#088A85"
+                />
+              </View>
+              <Text style={styles.termsText}>
+                I have read and agree to the{" "}
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Text style={styles.termsLink}>Terms and Conditions</Text>
+                </TouchableOpacity>
+                <Text style={{ color: "red" }}> *</Text>
+              </Text>
+            </View>
+            {isCheckedError ? (
+              <Text style={[styles.errorText, { marginLeft: 15 }]}>
+                {isCheckedError}
+              </Text>
+            ) : null}
+          </View>
+
+          {/* Register Button */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.registerButton}
+              onPress={handleRegister}
+            >
+              <Text style={styles.registerButtonText}>Register</Text>
             </TouchableOpacity>
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
+          </View>
+
+          {/* Navigate to Login */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.loginLink}>Login here</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Modal for Terms and Conditions */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Terms and Conditions</Text>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                  <Text style={styles.modalText}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                    nec odio. Praesent libero. Sed cursus ante dapibus diam.{" "}
+                  </Text>
+                </ScrollView>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => {
+                    setModalVisible(false);
+                    setIsChecked(true);
+                  }}
+                >
+                  <Text style={styles.closeButtonText}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
-        {isCheckedError ? <Text style={styles.errorText}>{isCheckedError}</Text> : null}
-      </View>
-
-      {/* Register Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-          <Text style={styles.registerButtonText}>Register</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Navigate to Login */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.loginLink}>Login here</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Modal for Terms and Conditions */}
-      <Modal
-  animationType="slide"
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={() => setModalVisible(false)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContainer}>
-    <Text style={styles.modalTitle}>Terms and Conditions</Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.modalText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-          odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-          quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
-          mauris. Fusce nec tellus sed augue semper porta. Mauris massa.
-          Vestibulum lacinia arcu eget nulla.{"\n\n"}
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-          odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-          quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
-          mauris. Fusce nec tellus sed augue semper porta. Mauris massa.
-          Vestibulum lacinia arcu eget nulla.{"\n\n"}
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-          odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-          quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
-          mauris. Fusce nec tellus sed augue semper porta. Mauris massa.
-          Vestibulum lacinia arcu eget nulla.{"\n\n"}
-          {/* Repeat or add more content as needed */}
-        </Text>
-      </ScrollView>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => setModalVisible(false)}
-      >
-        <Text style={styles.closeButtonText}>Close</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF", paddingHorizontal: 20, justifyContent: "center" },
+  container: { flex: 1, backgroundColor: "#FFFFFF", paddingHorizontal: 20 },
   logoContainer: { alignItems: "center", marginTop: 40 },
   logo: { width: 200, height: 100 },
   inputContainer: { marginBottom: 20, padding: 16 },
@@ -221,7 +240,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     color: "red",
-    padding: 16,
+    marginBottom: 16,
   },
   termsContainer: { flexDirection: "row", alignItems: "center", marginLeft: 16, marginBottom:15 },
   checkboxContainer: {
@@ -253,7 +272,7 @@ const styles = StyleSheet.create({
 
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", 
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -262,7 +281,7 @@ const styles = StyleSheet.create({
     width: "90%", 
     height: "80%", 
     borderRadius: 10,
-    overflow: "hidden", 
+    overflow: "hidden",
   },
   scrollContainer: {
     padding: 16,
@@ -285,6 +304,11 @@ const styles = StyleSheet.create({
     padding: 12,
     borderTopWidth: 1,
     borderTopColor: "#ddd",
+    alignSelf: "center",
+    width: "80%", 
+    marginTop:10,    
+    marginBottom: 10, 
+    borderRadius: 8,
   },
   closeButtonText: {
     color: "white",

@@ -8,6 +8,8 @@ import {
   Image,
   SafeAreaView,
 } from "react-native";
+import { login } from "../API/restApi";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
@@ -15,8 +17,12 @@ export default function LoginPage({ navigation }) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const handleLogin = () => {
+  const {saveToken} = useAuth();
+
+  async function handleLogin() {
     let valid = true;
+    console.log("login")
+
 
     setEmailError("");
     setPasswordError("");
@@ -34,8 +40,19 @@ export default function LoginPage({ navigation }) {
       valid = false;
     } 
 
-    if (valid) {
-      alert("Logged in successfully!");
+    console.log("sign in")
+    try {
+      const result = await login(
+        email,
+        password
+      )
+      const token = result.data.token
+      saveToken(token)
+      navigation.navigate("MainTabs", { screen: "Home" });
+    } catch(e) {
+     console.log(e)
+    } finally {
+      return null;
     }
   };
 
@@ -75,7 +92,7 @@ export default function LoginPage({ navigation }) {
 
       {/* Login Button */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => handleLogin()}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
       </View>

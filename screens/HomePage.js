@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,13 +8,43 @@ import {
   TouchableOpacity,
   Switch,
 } from "react-native";
-import Navbar from "../components/Navbar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ScrollView } from "react-native-web";
+import { ActivityIndicator, ScrollView } from "react-native-web";
+// import { fetchPosts } from "../API/restApi";
 
 export default function HomePage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [balanceVisible, setBalanceVisible] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+
+  // useEffect(() => {
+  //   const getPosts = async () => {
+  //     try {
+  //       const data = await fetchPosts();
+  //       setPosts(data);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   getPosts();
+  // }, []);
+
+  // if (loading) {
+  //   return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+  // } 
+
+  // if (error) {
+  //   return (
+  //     <View style={styles.errorContainer}>
+  //       <Text style={styles.errorText}>{error}</Text>
+  //     </View>
+  //   );
+  // }
 
   const transactions = [
     { id: 1, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
@@ -23,13 +53,13 @@ export default function HomePage() {
     { id: 4, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
     { id: 5, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
     { id: 6, name: "Adityo", type: "Topup", amount: 750000, image: require("../assets/MELODY.jpg") },
-    // { id: 7, name: "Adityo", type: "Topup", amount: 500000, image: require("../assets/MELODY.jpg") },
-    // { id: 8, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
-    // { id: 9, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
-    // { id: 10, name: "Adityo", type: "Topup", amount: 750000, image: require("../assets/MELODY.jpg") },
-    // { id: 11, name: "Adityo", type: "Topup", amount: 500000, image: require("../assets/MELODY.jpg") },
-    // { id: 12, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
-    // { id: 13, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
+    { id: 7, name: "Adityo", type: "Topup", amount: 500000, image: require("../assets/MELODY.jpg") },
+    { id: 8, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
+    { id: 9, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
+    { id: 10, name: "Adityo", type: "Topup", amount: 750000, image: require("../assets/MELODY.jpg") },
+    { id: 11, name: "Adityo", type: "Topup", amount: 500000, image: require("../assets/MELODY.jpg") },
+    { id: 12, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
+    { id: 13, name: "Adityo Gizwanda", type: "Transfer", amount: -150000, image: require("../assets/MELODY.jpg") },
     // { id: 14, name: "Adityo", type: "Topup", amount: 750000, image: require("../assets/MELODY.jpg") },
     // { id: 15, name: "Adityo", type: "Topup", amount: 500000, image: require("../assets/MELODY.jpg") },
     // { id: 16, name: "Adityo Gizwanda", type: "Transfer", amount: -25000, image: require("../assets/MELODY.jpg") },
@@ -118,12 +148,12 @@ export default function HomePage() {
 
 
       {/* Transaction History */}
-      <ScrollView>
       <View style={[styles.transactionContainer, themeStyles.card]}>
         <Text style={[styles.transactionTitle, themeStyles.text]}>
           Transaction History
         </Text>
         <FlatList
+          style ={{height:300, maxHeight:600}}
           data={transactions}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
@@ -155,11 +185,21 @@ export default function HomePage() {
           )}
         />
       </View>
-      </ScrollView>
-      <View>
-      <Navbar navigation={navigation} />
-      </View>
-    </View>
+    {/* <FlatList
+      data={posts}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.postContainer}>
+          <Text style={styles.title}>{item.first_name}</Text>
+          <Text style={styles.body}>{item.last_name}</Text>
+          {/* <Image
+            source={{uri: item.avatar}}
+            style={{ width: 200, height: 200}}
+          ></Image> 
+        </View>
+      )}
+    /> */}
+    </View> 
   );
 }
 
@@ -286,6 +326,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
     marginTop: 12,
+    height: 6500
   },
   transactionTitle: {
     fontSize: 16,
@@ -298,8 +339,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   detailsContainer: {
-    flex: 1, // Allow this section to take up available space
-    marginRight: 16, // Add spacing between the details and the amount
+    flex: 1,
+    marginRight: 16,
   },
   transactionName: {
     fontSize: 14,
