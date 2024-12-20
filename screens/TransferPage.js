@@ -24,30 +24,24 @@ export default function TransferPage({ navigation }) {
         </View>
 
         <View style={{ gap: 30 }}>
-          {/* Recipient Section */}
-          <View
-            style={{
-              backgroundColor: "#19918F",
-              padding: 20,
-            }}
-          >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>
-              To : 9000008940208
-            </Text>
-          </View>
+        {/* Account Number */}
+        <View style={styles.accountNumberContainer}>
+          <Text style={styles.accountValue}>ATo : 9000008940208</Text>
+        </View>
 
           {/* Amount Section */}
           <View style={styles.container}>
-            <Text style={{ fontSize: 16, color: "#B3B3B3", marginBottom: 15 }}>
+            <Text style={{ fontSize: 12, color: "gray", marginBottom: 15 }}>
               Amount
             </Text>
             <View style={styles.inputArea}>
               <View style={{ flexDirection: "row", borderBottomWidth: 2 }}>
-                <Text style={{ fontSize: 16, paddingRight: 10 }}>Rp</Text>
+                <Text style={{ fontSize: 16, paddingRight: 10, fontWeight: "500"}}>IDR</Text>
                 <TextInput
                   placeholder=""
                   style={{
                     fontSize: 36,
+                    color: "gray",
                   }}
                 />
               </View>
@@ -101,6 +95,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 45,
     gap: 10,
+  },
+  accountNumberContainer: {
+    backgroundColor: "#19918F",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  accountValue: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "500",
   },
   inputArea: {
     height: 40,

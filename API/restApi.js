@@ -12,8 +12,10 @@ const api = axios.create({
 });
 
 export const fetchPosts = async () => {
+  const token = AsyncStorage.getItem('userToken')
+  
   try {
-    const response = await api.get('/users');
+    const response = await api.get('/users/me');
     return response.data.data;
   } catch (error) {
     throw new Error('Failed to fetch posts: ' + error.message);

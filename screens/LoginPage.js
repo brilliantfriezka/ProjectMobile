@@ -23,7 +23,6 @@ export default function LoginPage({ navigation }) {
     let valid = true;
     console.log("login")
 
-
     setEmailError("");
     setPasswordError("");
 
@@ -40,6 +39,7 @@ export default function LoginPage({ navigation }) {
       valid = false;
     } 
 
+    // For the Log in
     console.log("sign in")
     try {
       const result = await login(
